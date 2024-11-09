@@ -9,13 +9,15 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 const serchForm = document.querySelector('.search-form');
 const galerySerch = document.querySelector('.gallery');
+const loaderQ = document.querySelector('loader')
 
-let simpleLightBox = new SimpleLightbox('.gallery a');
+let gallery = new SimpleLightbox('.gallery a');
 
 const submitForm = event => {
     event.preventDefault();
 
     const searchValue = serchForm.elements.searchQuery.value.trim();
+    
 
     fetchImages(searchValue)
     .then( data => {
@@ -25,11 +27,12 @@ const submitForm = event => {
                 position: 'topRight',
             });
 
-            galerySerch.innerHTML = '';
+                        galerySerch.innerHTML = '';
             serchForm.reset();
         }
         const imgCard = data.hits.map(imgDetails => galleryCard(imgDetails)).join('');
         galerySerch.innerHTML = imgCard;
+        simpleLightBox.refresh();
         
     })
     .catch( err => {
