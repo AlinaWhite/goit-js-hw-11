@@ -9,7 +9,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 const serchForm = document.querySelector('.search-form');
 const galerySerch = document.querySelector('.gallery');
-const loaderQ = document.querySelector('loader')
+const loaderQ = document.querySelector('.loader')
 
 let gallery = new SimpleLightbox('.gallery a');
 
@@ -18,6 +18,7 @@ const submitForm = event => {
 
     const searchValue = serchForm.elements.searchQuery.value.trim();
     
+    loaderQ.classList.remove('is-hidden');
 
     fetchImages(searchValue)
     .then( data => {
@@ -27,16 +28,19 @@ const submitForm = event => {
                 position: 'topRight',
             });
 
-                        galerySerch.innerHTML = '';
+            galerySerch.innerHTML = '';
             serchForm.reset();
         }
         const imgCard = data.hits.map(imgDetails => galleryCard(imgDetails)).join('');
         galerySerch.innerHTML = imgCard;
-        simpleLightBox.refresh();
+        gallery.refresh();
         
     })
     .catch( err => {
         console.log(err);
+    })
+    .finally(data => {
+        loaderQ.classList.add('is-hidden');
     })
 
 };
